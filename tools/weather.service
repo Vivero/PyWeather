@@ -1,0 +1,14 @@
+[Unit]
+Description=Weather Logger
+After=syslog.target network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/PyWeather/
+ExecStart=/opt/PyWeather/main.sh
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=PyWeather
+
+[Install]
+WantedBy=multi-user.target
