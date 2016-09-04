@@ -58,7 +58,7 @@ class PyWeather:
                 cursor.close()
 
             # wait till next polling period
-            sleep(5.0)
+            sleep(600.0)
 
         print("Terminating...")
 
