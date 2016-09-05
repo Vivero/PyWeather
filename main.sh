@@ -14,12 +14,25 @@ else
 	exit 1
 fi
 
-export PYWEATHER_DB_NAME='pynest'
-export PYWEATHER_DB_USER='pynest'
-export PYWEATHER_DB_PASS='flats44'
-export PYWEATHER_DB_HOST='localhost'
+PYWEATHER_DB_INFO_FILE="data/db_info.sh"
 
 export WEATHER_LOCATION_STATE='MA'
 export WEATHER_LOCATION_CITY='Chelsea'
 
-exec /usr/bin/python /opt/PyWeather/pyweather.py
+if [[ -e "$PYWEATHER_DB_INFO_FILE" ]]; then
+    source $PYWEATHER_DB_INFO_FILE
+
+    exec /usr/bin/python /opt/PyWeather/pyweather.py
+
+else
+    printf "Missing '$PYWEATHER_DB_INFO_FILE'\n"
+    printf "Create the file with the following contents:\n\n"
+    printf "  export PYWEATHER_DB_NAME=<PostgreSQL database name>\n"
+    printf "  export PYWEATHER_DB_USER=<PostgreSQL user name>\n"
+    printf "  export PYWEATHER_DB_PASS=<PostgreSQL user password>\n"
+    printf "  export PYWEATHER_DB_HOST=<PostgreSQL hostname>\n"
+    printf "\nReplace <...> with appropriate credentials to access your PostgreSQL database.\n\n"
+    printf "Running PyWeather with database disabled ...\n"
+    
+    exec /usr/bin/python /opt/PyWeather/pyweather.py --no-db
+fi

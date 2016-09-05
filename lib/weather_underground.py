@@ -10,12 +10,13 @@ class WeatherUnderground:
 
     def get_data(self):
         
-        # http GET on Weather Underground API
-        wu_response = requests.get(self.wu_api_url.format(self.auth_key, self.state, self.city))
-
-        # check the response
         try:
+            # http GET on Weather Underground API
+            wu_response = requests.get(self.wu_api_url.format(self.auth_key, self.state, self.city))
+
+            # check the response
             wu_response.raise_for_status()
+            
         except Exception as e:
             print("WeatherUnderground.get_data exception: '{:s}'".format(str(e)))
             return None

@@ -87,3 +87,5 @@ ENV/
 .ropeproject
 
 data/weather_api.sh
+data/db_info.sh
+

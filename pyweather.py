@@ -28,12 +28,12 @@ class PyWeather:
 
     def start(self):
         while (not self.terminate):
-            dt = datetime.now()
-            print("PyWeather! {:s}".format(dt.strftime("%A, %d. %B %Y %I:%M:%S%p")))
+            #dt = datetime.now()
+            #print("PyWeather! {:s}".format(dt.strftime("%A, %d. %B %Y %I:%M:%S%p")))
 
             # get Nest API data
             weather_data = self.weather.get_data()
-            print json.dumps(weather_data, indent=4, sort_keys=True)
+            #print json.dumps(weather_data, indent=4, sort_keys=True)
 
             # store in database
             if (weather_data is not None) and (self.db_conn is not None):
@@ -43,7 +43,7 @@ class PyWeather:
                 relative_humidity = re.match(r"([0-9]+)", observation_data["relative_humidity"]).group(1)
 
                 cursor = self.db_conn.cursor()
-                cursor.execute("INSERT INTO weathers (weather, temp_f, wind_mph, relative_humidity, pressure_mb, precip_1hr_in, feelslike_f, raw_data, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, now(), now())", (
+                cursor.execute("INSERT INTO weather_observations (weather, temp_f, wind_mph, relative_humidity, pressure_mb, precip_1hr_in, feelslike_f, raw_data, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, now(), now())", (
                             observation_data['weather'],
                             observation_data['temp_f'],
                             observation_data['wind_mph'],
