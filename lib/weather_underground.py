@@ -9,6 +9,8 @@ class WeatherUnderground:
         self.wu_api_url = 'http://api.wunderground.com/api/{0}/conditions/q/{1}/{2}.json'
 
     def get_data(self):
+
+        wu_response_json = None
         
         try:
             # http GET on Weather Underground API
@@ -16,11 +18,14 @@ class WeatherUnderground:
 
             # check the response
             wu_response.raise_for_status()
+
+            # get JSON-formatted data
+            wu_response_json = wu_response.json()
             
         except Exception as e:
             print("WeatherUnderground.get_data exception: '{:s}'".format(str(e)))
-            return None
+            print("Weather Underground response: {:s}".format(wu_response.text))
+            wu_response_json = None
 
-        # return JSON-formatted data
-        return wu_response.json()
+        return wu_response_json
 
