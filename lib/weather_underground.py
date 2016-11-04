@@ -21,10 +21,19 @@ class WeatherUnderground:
 
             # get JSON-formatted data
             wu_response_json = wu_response.json()
+
+        except requests.exceptions.RequestException as re:
+            print("WeatherUnderground.get_data requests exception: '{:s}'".format(re.__class__.__name__))
+            print(str(re))
+
+        except requests.exceptions.HTTPError as he:
+            print("WeatherUnderground.get_data HTTP exception: '{:s}'".format(he.__class__.__name__))
+            print(str(he))
+            print("WeatherUnderground response: {:s}".format(nest_response.text))
             
         except Exception as e:
-            print("WeatherUnderground.get_data exception: '{:s}'".format(str(e)))
-            print("Weather Underground response: {:s}".format(wu_response.text))
+            print("WeatherUnderground.get_data unexpected exception: '{:s}'".format(e.__class__.__name__))
+            print(str(e))
             wu_response_json = None
 
         return wu_response_json
