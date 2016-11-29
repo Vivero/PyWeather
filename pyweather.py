@@ -41,22 +41,24 @@ class PyWeather:
                 try:
                     observation_data = weather_data["current_observation"]
 
-                    relative_humidity = re.match(r"([0-9]+)", observation_data["relative_humidity"]).group(1)
+                    re_humidity = re.match(r"([0-9]+)", observation_data["relative_humidity"])
+                    if re_humidity is not None:
+                        relative_humidity = re_humidity.group(1)
 
-                    cursor = self.db_conn.cursor()
-                    cursor.execute("INSERT INTO weather_observations (weather, temp_f, wind_mph, relative_humidity, pressure_mb, precip_1hr_in, feelslike_f, raw_data, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, now(), now())", (
-                                observation_data['weather'],
-                                observation_data['temp_f'],
-                                observation_data['wind_mph'],
-                                relative_humidity,
-                                observation_data['pressure_mb'],
-                                observation_data['precip_1hr_in'],
-                                observation_data['feelslike_f'],
-                                json.dumps(weather_data),
+                        cursor = self.db_conn.cursor()
+                        cursor.execute("INSERT INTO weather_observations (weather, temp_f, wind_mph, relative_humidity, pressure_mb, precip_1hr_in, feelslike_f, raw_data, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, now(), now())", (
+                                    observation_data['weather'],
+                                    observation_data['temp_f'],
+                                    observation_data['wind_mph'],
+                                    relative_humidity,
+                                    observation_data['pressure_mb'],
+                                    observation_data['precip_1hr_in'],
+                                    observation_data['feelslike_f'],
+                                    json.dumps(weather_data),
+                                )
                             )
-                        )
-                    self.db_conn.commit()
-                    cursor.close()
+                        self.db_conn.commit()
+                        cursor.close()
 
 
                 except KeyError as ke:
